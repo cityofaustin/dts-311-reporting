@@ -28,13 +28,16 @@ def extract():
     try:
         df = pd.read_csv(ENDPOINT, sep="\t", encoding="utf_16")
     except UnicodeError as e:
-        logger.info("Unexpected file type returned from the CSV endpoint. Check that you are on the city network. "
-                    "It's likely that your request is getting flagged as a bot by the web app firewall.")
+        logger.info(
+            "Unexpected file type returned from the CSV endpoint. Check that you are on the city network. "
+            "It's likely that your request is getting flagged as a bot by the web app firewall."
+        )
         raise e
     except Exception as e:
         raise e
     logger.info(f"Downloaded {len(df)} CSRs from endpoint")
     return df
+
 
 def convert_from_state_plane(df):
     """
@@ -42,7 +45,9 @@ def convert_from_state_plane(df):
     """
     # projection of coordinates
     transformer = Transformer.from_crs(crs_from="ESRI:102739", crs_to="EPSG:4326")
-    df["latitude"], df["longitude"] = transformer.transform(df["State Plane X Coordinate"].tolist(), df["State Plane Y Coordinate"].tolist())
+    df["latitude"], df["longitude"] = transformer.transform(
+        df["State Plane X Coordinate"].tolist(), df["State Plane Y Coordinate"].tolist()
+    )
     # Create wgs84 location columns in socrata format
     df["location"] = df.apply(build_point_data, axis=1)
     return df

@@ -37,8 +37,10 @@ def extract():
     try:
         df = pd.read_excel(ENDPOINT)
     except UnicodeError as e:
-        logger.info("Unexpected file type returned from the report endpoint. Check that you are on the city network. "
-                    "It's likely that your request is getting flagged as a bot by the web app firewall.")
+        logger.info(
+            "Unexpected file type returned from the report endpoint. Check that you are on the city network. "
+            "It's likely that your request is getting flagged as a bot by the web app firewall."
+        )
         raise e
     except Exception as e:
         raise e
