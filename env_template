@@ -1,0 +1,15 @@
+# Socrata aka City datahub
+CSR_DATASET=
+CSR_ENDPOINT=
+SO_KEY=
+SO_SECRET=
+SO_TOKEN=
+SO_WEB=
+
+# Socrata Dataset IDs
+CSR_DATASET=
+FLEX_NOTES_DATASET=
+
+# 311 report endpoints
+CSR_ENDPOINT=
+FLEX_NOTE_ENDPOINT=
