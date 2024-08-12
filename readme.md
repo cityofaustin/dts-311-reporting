@@ -16,6 +16,12 @@ This repo contains python scripts that pull CSV reports from the [City's 3-1-1 s
 
 `$ python etl/flex_notes_to_socrata.py`
 
+## Activities to Socrata
+
+CSRs typically contain activities which document the steps that city staff have taken to resolve a CSR. `activities_to_socrata.py` processes a csv report that contains activities.
+
+`$ python etl/activities_to_socrata.py`
+
 ## Environment variables
 
 All required environment variables are in `env_template` and can be found in our password storage. 

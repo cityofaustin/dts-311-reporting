@@ -24,21 +24,6 @@ DATASET = os.getenv("CSR_DATASET")
 ENDPOINT = os.getenv("CSR_ENDPOINT")
 
 
-def extract():
-    try:
-        df = pd.read_csv(ENDPOINT, sep="\t", encoding="utf_16")
-    except UnicodeError as e:
-        logger.info(
-            "Unexpected file type returned from the CSV endpoint. Check that you are on the city network. "
-            "It's likely that your request is getting flagged as a bot by the web app firewall."
-        )
-        raise e
-    except Exception as e:
-        raise e
-    logger.info(f"Downloaded {len(df)} CSRs from endpoint")
-    return df
-
-
 def convert_from_state_plane(df):
     """
     Adds a WGS-84 lat/long column to the dataframe based on the state plane coordinates.
@@ -97,18 +82,16 @@ def transform(df):
         "Close Date",
     ]
 
-    # date column formatting to match format expected by Socrata
-    for col in date_cols:
-        df[col] = pd.to_datetime(df[col])
-        df[col] = df[col].dt.strftime("%Y-%m-%dT%H:%M:%S")
-        df[col] = df[col].where(pd.notnull(df[col]), None)
-
+    # Generating fiscal year column based on the created date.
     df["datetime"] = pd.to_datetime(df["Created Date"])
     df["fiscal_year"] = df.apply(get_fiscal_year, axis=1)
 
     # Field mapping
     df = df[list(CSR_MAP.keys())]
     df.rename(columns=CSR_MAP, inplace=True)
+
+    # date column formatting to match format expected by Socrata
+    df = utils.transform_datetime_formats(df)
 
     # Setting these NaN values to None, because Socrata will be mad otherwise
     df["state_plane_x_coordinate"] = df["state_plane_x_coordinate"].replace(
@@ -123,13 +106,6 @@ def transform(df):
     return payload
 
 
-def load(client, data):
-    logger.info("Uploading CSR data to Socrata")
-    res = client.upsert(DATASET, data)
-    logger.info(res)
-    return res
-
-
 def main():
     soda = Socrata(
         SO_WEB,
@@ -139,9 +115,12 @@ def main():
         timeout=500,
     )
 
-    data = extract()
+    data = utils.extract(endpoint=ENDPOINT, logger=logger)
     data = transform(data)
-    res = load(soda, data)
+
+    logger.info("Uploading CSR records to Socrata")
+    res = utils.load_to_socrata(client=soda, dataset_id=DATASET, data=data)
+    logger.info(res)
 
     return res
 
