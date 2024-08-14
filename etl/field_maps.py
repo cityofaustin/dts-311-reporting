@@ -34,3 +34,14 @@ FLEX_NOTES_MAP = {
     "Flex Question": "flex_question",
     "Flex Answer": "flex_answer",
 }
+
+ACTIVITIES_MAP = {
+    "Service Request (SR) Number": "service_request_sr_number",
+    "Activity ID": "activity_id",
+    "Activity ": "activity",
+    "Created Date/Time": "created_date_time",
+    "Due Date": "due_date",
+    "Completed Date": "completed_date",
+    "Outcome ": "outcome",
+    "Activity Details": "activity_details",
+}
