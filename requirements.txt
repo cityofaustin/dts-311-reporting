@@ -1,4 +1,5 @@
 pandas==1.5.*
+numpy==1.26.4
 sodapy==2.1.*
 pyproj==3.6.*
 openpyxl==3.1.*
