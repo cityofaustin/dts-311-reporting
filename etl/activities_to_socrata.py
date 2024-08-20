@@ -55,7 +55,7 @@ def main():
     data = transform(data)
     logger.info("Uploading activity records to Socrata")
     res = utils.load_to_socrata(
-        client=soda, dataset_id=DATASET, data=data, method="replace"
+        client=soda, dataset_id=DATASET, data=data, method="upsert"
     )
     logger.info(res)
 
