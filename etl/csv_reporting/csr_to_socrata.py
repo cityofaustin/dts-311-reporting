@@ -10,8 +10,8 @@ import numpy as np
 from sodapy import Socrata
 from pyproj import Transformer
 
-from field_maps import CSR_MAP
-import utils
+from etl.field_maps import CSR_MAP
+from etl import utils
 
 # Socrata Secrets
 SO_WEB = os.getenv("SO_WEB")

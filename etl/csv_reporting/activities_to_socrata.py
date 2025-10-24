@@ -8,8 +8,8 @@ import logging
 import pandas as pd
 from sodapy import Socrata
 
-from field_maps import ACTIVITIES_MAP
-import utils
+from etl.field_maps import ACTIVITIES_MAP
+from etl import utils
 
 # Socrata Secrets
 SO_WEB = os.getenv("SO_WEB")

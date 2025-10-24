@@ -10,8 +10,14 @@ SO_WEB=
 CSR_DATASET=
 FLEX_NOTES_DATASET=
 ACTIVITIES_DATASET=
+REALTIME_DATASET=
 
-# 311 report endpoints
+# 311 csv report endpoints
 CSR_ENDPOINT=
 FLEX_NOTE_ENDPOINT=
 ACTIVITIES_ENDPOINT=
+
+# Open 311 API Key
+# Request from here: https://311.austintexas.gov/open311/app_requests/new
+OPEN_311_API_KEY=
+OPEN_311_API_BASE_URL=https://311.austintexas.gov/open311/v2
