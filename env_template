@@ -1,5 +1,4 @@
 # Socrata aka City datahub
-CSR_DATASET=
 CSR_ENDPOINT=
 SO_KEY=
 SO_SECRET=
