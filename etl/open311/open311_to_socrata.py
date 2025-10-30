@@ -1,5 +1,5 @@
 """
-Checks open311 API for new CSRs and updates a Socrata Dataset
+Checks open311 API for new requests and updates a Socrata Dataset
 """
 
 import argparse
@@ -36,43 +36,20 @@ CENTRAL_TZ = ZoneInfo("America/Chicago")
 UTC_TZ = timezone.utc
 
 
-def determine_query_time(client, override_date=None):
+def determine_query_time(override_date):
     """
-    Uses provided date arg first, and subtracts 10 minutes to reduce the risk we miss any updated records
-    If no arg is provided, the date used is the most recently updated socrata record.
-    If the dataset is empty, default to Oct 13, 2025.
+    Converts provided UTC datetime to expected string format for open311 API.
     """
-    if override_date:
-        try:
-            # Parse ISO 8601 datetime and subtract 10 minutes
-            dt = datetime.fromisoformat(override_date)
-            adjusted = dt - timedelta(minutes=10)
-            adjusted_str = adjusted.isoformat()
-            adjusted_str = adjusted_str.replace("+00:00", "Z")
-            logger.info(f"Using provided date (minus 10 minutes): {adjusted_str}")
-            return adjusted_str
-        except ValueError:
-            raise ValueError(
-                f"Invalid date format: {override_date}. Expected ISO 8601 format."
+    try:
+        # Parse ISO 8601 datetime and subtract 10 minutes
+        dt = datetime.fromisoformat(override_date)
+        string_time = dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+        logger.info(f"Using provided date: {string_time}")
+        return string_time
+    except ValueError:
+        raise ValueError(
+            f"Invalid date format: {override_date}. Expected ISO 8601 format."
             )
-
-    # get last updated record from socrata
-    date = client.get(
-        REALTIME_DATASET,
-        select="updated_datetime",
-        order="updated_datetime DESC",
-        limit=1,
-    )
-    if date:
-        # Interpret as Central Time and convert to UTC
-        ct_time = datetime.fromisoformat(date[0]["updated_datetime"]).replace(
-            tzinfo=CENTRAL_TZ
-        )
-        utc_time = ct_time.astimezone(UTC_TZ)
-        adjusted_str = utc_time.isoformat()
-        adjusted_str = adjusted_str.replace("+00:00", "Z")
-        return adjusted_str
-    return "2025-10-13T00:00:00Z"
 
 
 def socrata_point_location_formatting(rec):
@@ -105,11 +82,11 @@ def main(args):
         SO_TOKEN,
         username=SO_KEY,
         password=SO_SECRET,
-        timeout=500,
+        timeout=30,
     )
 
     # Determining what time bounds we should ask Open311 for.
-    query_time = determine_query_time(soda, args.date)
+    query_time = determine_query_time(args.date)
 
     keep_going = True
     page = 1
@@ -162,8 +139,8 @@ if __name__ == "__main__":
     parser.add_argument(
         "-d",
         "--date",
-        help="Optional ISO 8601 date (e.g. 2025-10-15T06:55:01.132759+00:00) to start query from",
-        required=False,
+        help="Optional ISO 8601 date (e.g. 2025-10-15T06:55:01.132759+00:00) in UTC to start query from",
+        required=True,
     )
     args = parser.parse_args()
     main(args)

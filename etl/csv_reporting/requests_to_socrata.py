@@ -1,5 +1,5 @@
 """
-Downloads CSR data from a CSV report endpoint and then uploads the data to a Socrata dataset
+Downloads 311 requests data from a CSV report endpoint and then uploads the data to a Socrata dataset
 """
 
 import os
@@ -10,7 +10,7 @@ import numpy as np
 from sodapy import Socrata
 from pyproj import Transformer
 
-from etl.field_maps import CSR_MAP
+from etl.field_maps import REQUESTS_MAP
 from etl import utils
 
 # Socrata Secrets
@@ -18,10 +18,10 @@ SO_WEB = os.getenv("SO_WEB")
 SO_TOKEN = os.getenv("SO_TOKEN")
 SO_KEY = os.getenv("SO_KEY")
 SO_SECRET = os.getenv("SO_SECRET")
-DATASET = os.getenv("CSR_DATASET")
+DATASET = os.getenv("REQUESTS_DATASET")
 
-# CSR CSV data endpoint
-ENDPOINT = os.getenv("CSR_ENDPOINT")
+# Request CSV report endpoint
+ENDPOINT = os.getenv("REQUESTS_ENDPOINT")
 
 
 def convert_from_state_plane(df):
@@ -70,7 +70,7 @@ def get_fiscal_year(row):
 
 
 def transform(df):
-    logger.info("Transforming CSR data")
+    logger.info("Transforming 311 Request data")
     df = convert_from_state_plane(df)
 
     # Converting datetime to correct format for socrata
@@ -87,8 +87,8 @@ def transform(df):
     df["fiscal_year"] = df.apply(get_fiscal_year, axis=1)
 
     # Field mapping
-    df = df[list(CSR_MAP.keys())]
-    df.rename(columns=CSR_MAP, inplace=True)
+    df = df[list(REQUESTS_MAP.keys())]
+    df.rename(columns=REQUESTS_MAP, inplace=True)
 
     # date column formatting to match format expected by Socrata
     df = utils.transform_datetime_formats(df)
@@ -118,7 +118,7 @@ def main():
     data = utils.extract(endpoint=ENDPOINT, logger=logger)
     data = transform(data)
 
-    logger.info("Uploading CSR records to Socrata")
+    logger.info("Uploading 311 request records to Socrata")
     res = utils.load_to_socrata(client=soda, dataset_id=DATASET, data=data)
     logger.info(res)
 

@@ -1,4 +1,4 @@
-CSR_MAP = {
+REQUESTS_MAP = {
     "Service Request (SR) Number": "service_request_sr_number",
     "Department": "department",
     "Group Description": "group_description",
