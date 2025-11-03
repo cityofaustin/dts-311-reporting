@@ -1,5 +1,5 @@
 """
-Downloads activities for CSRs data from a CSV report endpoint and then uploads the data to a Socrata dataset
+Downloads activities for 311 request data from a CSV report endpoint and then uploads the data to a Socrata dataset
 """
 
 import os
@@ -8,8 +8,8 @@ import logging
 import pandas as pd
 from sodapy import Socrata
 
-from field_maps import ACTIVITIES_MAP
-import utils
+from etl.field_maps import ACTIVITIES_MAP
+from etl import utils
 
 # Socrata Secrets
 SO_WEB = os.getenv("SO_WEB")
@@ -18,7 +18,7 @@ SO_KEY = os.getenv("SO_KEY")
 SO_SECRET = os.getenv("SO_SECRET")
 DATASET = os.getenv("ACTIVITIES_DATASET")
 
-# CSR CSV data endpoint
+# request activities CSV report endpoint
 ENDPOINT = os.getenv("ACTIVITIES_ENDPOINT")
 
 
@@ -32,7 +32,7 @@ def transform(df):
     # date column formatting to match format expected by Socrata
     df = utils.transform_datetime_formats(df)
 
-    # Remove rows without an activity id, this happens when a CSR has no activities associated with it
+    # Remove rows without an activity id, this happens when a request has no activities associated with it
     df = df.dropna(subset=["activity_id"])
 
     # Replacing missing values with None instead of the default NaN pandas uses

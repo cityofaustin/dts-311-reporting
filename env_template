@@ -1,5 +1,4 @@
 # Socrata aka City datahub
-CSR_DATASET=
 CSR_ENDPOINT=
 SO_KEY=
 SO_SECRET=
@@ -7,11 +6,17 @@ SO_TOKEN=
 SO_WEB=
 
 # Socrata Dataset IDs
-CSR_DATASET=
+REQUESTS_DATASET=
 FLEX_NOTES_DATASET=
 ACTIVITIES_DATASET=
+REALTIME_DATASET=
 
 # 311 report endpoints
-CSR_ENDPOINT=
+REQUESTS_ENDPOINT=
 FLEX_NOTE_ENDPOINT=
 ACTIVITIES_ENDPOINT=
+
+# Open 311 API Key
+# Request from here: https://311.austintexas.gov/open311/app_requests/new
+OPEN_311_API_KEY=
+OPEN_311_API_BASE_URL=https://311.austintexas.gov/open311/v2

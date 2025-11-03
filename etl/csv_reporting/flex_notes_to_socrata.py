@@ -1,5 +1,5 @@
 """
-Downloads flex question/answers for CSRs data from a CSV report endpoint and then uploads the data to a Socrata dataset
+Downloads flex question/answers for 311 request data from a CSV report endpoint and then uploads the data to a Socrata dataset
 """
 
 import os
@@ -8,8 +8,8 @@ import logging
 import pandas as pd
 from sodapy import Socrata
 
-from field_maps import FLEX_NOTES_MAP
-import utils
+from etl.field_maps import FLEX_NOTES_MAP
+from etl import utils
 
 # Socrata Secrets
 SO_WEB = os.getenv("SO_WEB")
@@ -18,7 +18,7 @@ SO_KEY = os.getenv("SO_KEY")
 SO_SECRET = os.getenv("SO_SECRET")
 DATASET = os.getenv("FLEX_NOTES_DATASET")
 
-# CSR CSV data endpoint
+# flex note CSV report endpoint
 ENDPOINT = os.getenv("FLEX_NOTE_ENDPOINT")
 
 # Questions we do not want to store
