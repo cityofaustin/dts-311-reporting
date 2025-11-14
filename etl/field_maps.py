@@ -45,3 +45,20 @@ ACTIVITIES_MAP = {
     "Outcome ": "outcome",
     "Activity Details": "activity_details",
 }
+
+OPEN_311_FIELD_NAMES = [
+    "service_request_id",
+    "status",
+    "service_name",
+    "service_code",
+    "requested_datetime",
+    "updated_datetime",
+    "address",
+    "lat",
+    "long",
+    "token",
+    "location",
+    "status_notes",
+    "description",
+    "media_url",
+]
