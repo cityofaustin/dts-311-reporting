@@ -13,6 +13,7 @@ import time
 from sodapy import Socrata
 
 from etl import utils
+from etl.field_maps import OPEN_311_FIELD_NAMES
 
 # Socrata Secrets
 SO_WEB = os.getenv("SO_WEB")
@@ -113,6 +114,12 @@ def main(args):
             record = convert_to_central_and_strip_tz(
                 record, ["updated_datetime", "requested_datetime"]
             )
+
+        # Keeping only the allowed fields that are in the dataset
+        data = [
+            {k: v for k, v in record.items() if k in OPEN_311_FIELD_NAMES}
+            for record in data
+        ]
 
         # Send data to socrata
         res = utils.load_to_socrata(soda, REALTIME_DATASET, data, method="upsert")
