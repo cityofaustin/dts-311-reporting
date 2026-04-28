@@ -57,7 +57,7 @@ def socrata_point_location_formatting(rec):
     """
     Formats latitude and longitude for "Point" Socrata datatype
     """
-    if rec["long"] and rec["lat"]:
+    if "lat" in rec and "long" in rec:
         return f"POINT ({rec['long']} {rec['lat']})"
     return None
 
